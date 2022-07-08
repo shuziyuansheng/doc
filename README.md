@@ -39,15 +39,15 @@ Beta测试网:
 
 **注意**: 地址需要转为全小写查询
 
-Beta测试网： https://query.beta.shuziyuansheng.com
-正式网： https://query.shuziyuansheng.com
+- Beta测试网： https://query.beta.shuziyuansheng.com
+- 正式网： https://query.shuziyuansheng.com
 
 #### 参考样例
 
 - 查询用户的token
 ```graphql
 query MyQuery {
-  tokens(first: 10, where: {owner: "0x000"}) {
+  tokens(first: 10, where: {owner: "0x000...000"}) {
     collection {
       id
     }
@@ -59,12 +59,27 @@ query MyQuery {
 - 查询token的持有者
 ```graphql
 query MyQuery {
-  tokens(first:10,where: {collection: "0xc5dfd3988ee048d74dcf0c5cc2562faab14282b3"}) {
+  tokens(first:10,where: {collection: "0x000...000"}) {
     owner {
       id
     }
     tokenID
     tokenURI
+  }
+}
+```
+- 查询token的转移信息
+```graphql
+query MyQuery {
+  transactions(where: {token:"0x000...000-1"}, orderBy:timestamp){
+    from {
+      id
+    }
+    to {
+      id
+    }
+    timestamp
+    block
   }
 }
 ```
