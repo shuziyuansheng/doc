@@ -35,15 +35,58 @@ Beta测试网:
 
 ### Graph
 
-目前可用的subgraph有 `/subgraphs/name/szys/nft/graphql`，追加在对应网络的graph服务域名后即可查看。具体可查询参数可访问后查看。
-
-**注意**: 地址需要转为全小写查询
+目前可用的subgraph有 `/subgraphs/name/szys/nft/graphql`，追加在对应网络的graph服务域名后即可查看。不同网络的查询地址如下，具体可查询参数可访问后查看。
 
 - Beta测试网： https://query.beta.shuziyuansheng.com
 - 正式网： https://query.shuziyuansheng.com
 
-#### 参考样例
+**注意**: 区块链地址需要转为全小写查询
 
+GraphQL的文档可参考 [GraphQL API](https://thegraph.com/docs/en/developer/graphql-api/)
+
+目前subgraph里定义有如下数据信息，对应复数为列表查询，具体包含关系可以在graph查询界面右侧文档中点击相应结构体查看。
+
+- collection: 一个collection是一个NFT合约，主要属性描述如下
+  - id: 合约地址
+  - name: NFT名称
+  - tokens: 合约所有token
+  - totalTokens: 合约共mint出来的token数量
+  - transactions: 合约所有交易
+- owner: 持有人
+  - id: 区块链地址
+  - tokens: 持有token信息
+  - totalTokens: 持有token总数
+  - fromTransactions: 作为from的交易
+  - toTransactions: 作为to的交易
+- token: Token信息
+  - id: Token在graph中唯一ID，格式为<合约地址>-<Token ID>
+  - collection: 对应合约
+  - tokenID: Token在合约中的ID
+  - tokenURI: Token meta json的地址
+  - owner: 持有人
+  - burned: 是否已销毁
+  - transactions: 相关交易
+- transaction
+  - id: 交易hash
+  - from: 发送方
+  - to: 接收方
+  - collection: 对应合约
+  - token: 对应token
+
+
+#### 参考样例
+可将样例复制到graph查询界面中，左侧会展开可选择的查询项及查询条件供选择
+
+- 查询合约列表
+```graphql
+query MyQuery {
+  collections(first: 10) {
+    id
+    name
+    totalTokens
+  }
+}
+```
 - 查询用户的token
 ```graphql
 query MyQuery {
