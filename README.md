@@ -1,4 +1,26 @@
-## 概述
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [概述](#概述)
+- [开发相关](#开发相关)
+  - [数据规范](#数据规范)
+    - [NFT合约接口](#nft合约接口)
+    - [Meta json](#meta-json)
+  - [页面开发](#页面开发)
+  - [后台开发](#后台开发)
+    - [RPC及区块链浏览器](#rpc及区块链浏览器)
+    - [Graph](#graph)
+      - [参考样例](#参考样例)
+  - [合约调用](#合约调用)
+    - [转赠合约](#转赠合约)
+    - [委托合约](#委托合约)
+
+<!-- /code_chunk_output -->
+
+
+# 概述
 
 数字原生系列开发均基于Silvia链，Silvia目前完全兼容EVM，从开发视角来看仅在交易权限上有限制，目前限制有：
 
@@ -8,15 +30,16 @@
 
 合约审核及KYC目前请先联系数字原生完成，公共入口即将提供
 
-## 开发相关
+# 开发相关
 
-### 数据规范
+## 数据规范
+### NFT合约接口
 数字原生发售的NFT目前遵循ERC721标准，接口参考
 - [IERC721](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/IERC721.sol)
 - [IERC721Enumerable](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/IERC721Enumerable.sol)
 - [IERC721Metadata](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/IERC721Metadata.sol)
 
-#### Meta json
+### Meta json
 接口IERC721Metadata中tokenURI方法会返回指向json的URL，格式如下
 ```jsonc
 {
@@ -35,28 +58,24 @@
 }
 ```
 
-### 页面开发
+## 页面开发
 数字原生为页面开发提供了一个Web3的Provider和Signer，可以完全兼容Web3开发模式。
 
 具体方法为引入数字原生的SW3包，使用SW3Provider或SW3Signer初始化ethers.js，之后和其他Web3应用开发没有区别。SW3会在需要时显示页面让用户完成授权地址和交易签名操作。
 
-### 后台开发
+## 后台开发
 
-### KYC
-需要发交易上链的地址必须在数字原生完成KYC，数字原生会将地址的KYC状态置为完成，之后方可发交易。
+### RPC及区块链浏览器
+Silvia链的RPC完全兼容Geth，目前RPC及浏览器地址为
 
-### RPC
-Silvia链的RPC完全兼容Geth，目前RPC地址为
-
-Beta测试网:
-- RPC: https://rpc.beta.silvia.link
-- Chain ID: 49368
-- 区块链浏览器: https://scan.beta.silvia.link
-
-正式网:
-- RPC: https://rpc.silvia.link
-- Chain ID: 8848
-- 区块链浏览器: https://scan.silvia.link
+- Beta测试网:
+  - RPC: https://rpc.beta.silvia.link
+  - Chain ID: 49368
+  - 区块链浏览器: https://scan.beta.silvia.link
+- 正式网:
+  - RPC: https://rpc.silvia.link
+  - Chain ID: 8848
+  - 区块链浏览器: https://scan.silvia.link
 
 ### Graph
 
@@ -100,6 +119,7 @@ GraphQL的文档可参考 [GraphQL API](https://thegraph.com/docs/en/developer/g
 
 
 #### 参考样例
+
 可将样例复制到graph查询界面中，左侧会展开可选择的查询项及查询条件供选择
 
 - 查询合约列表
@@ -152,9 +172,9 @@ query MyQuery {
 }
 ```
 
-### 合约调用
+## 合约调用
 
-#### 转赠合约
+### 转赠合约
 转赠合约用于控制token的可转赠间隔，是否可以通过转赠合约转赠受两个条件限制，一个是转赠合约中记录哪些合约的token可转赠的开关，一个是用户需approve授权转赠合约转移token。
 
 转赠合约的代码及ABI可参考
@@ -164,7 +184,7 @@ https://scan.silvia.link/address/0x691F7b4797d41464ad15366C9E5AfDA6F04Bba2c/cont
 - https://scan.silvia.link/address/0x691F7b4797d41464ad15366C9E5AfDA6F04Bba2c/read-proxy
 - https://scan.silvia.link/address/0x691F7b4797d41464ad15366C9E5AfDA6F04Bba2c/write-proxy
 
-#### 委托合约
+### 委托合约
 委托合约用于接受用户的交易委托，代用户进行销售，如拍卖。流程为用户向委托合约提交token的委托意向，合约接受后将token转入合约，合约根据实际成交情况将token转移给新持有者。
 
 委托合约的代码及ABI可参考
