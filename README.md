@@ -18,7 +18,7 @@
 
 #### Meta json
 接口IERC721Metadata中tokenURI方法会返回指向json的URL，格式如下
-```json
+```jsonc
 {
   "name": "NFT名称", // 名称
   "description": "NFT简介", // 简介
