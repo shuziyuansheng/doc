@@ -10,6 +10,31 @@
 
 ## 开发相关
 
+### 数据规范
+数字原生发售的NFT目前遵循ERC721标准，接口参考
+- [IERC721](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/IERC721.sol)
+- [IERC721Enumerable](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/IERC721Enumerable.sol)
+- [IERC721Metadata](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/IERC721Metadata.sol)
+
+#### Meta json
+接口IERC721Metadata中tokenURI方法会返回指向json的URL，格式如下
+```json
+{
+  "name": "NFT名称", // 名称
+  "description": "NFT简介", // 简介
+  "image": "https://domain/poster_image", // 缩略图URL，必须是图片，建议为方形
+  "raw": "https://domain/raw_data", // 原始文件URL，可以是图片、视频、3D
+  "creator": "NFT作者名称", // 作者
+  "publisher": "NFT发行方", // 发行方
+  "background_color": "99ccff", // NFT图片推荐背景填充色，开头不含#的hex [可选]
+  "external_url": "https://domain/url", // NFT扩展页面地址 [可选]
+  "properties":  // 扩展属性 [可选]
+  {
+    "rarity": {"name": "R级", "probability": "0.0001"} // 例：珍惜度 [可选]
+  }
+}
+```
+
 ### 页面开发
 数字原生为页面开发提供了一个Web3的Provider和Signer，可以完全兼容Web3开发模式。
 
@@ -59,7 +84,7 @@ GraphQL的文档可参考 [GraphQL API](https://thegraph.com/docs/en/developer/g
   - fromTransactions: 作为from的交易
   - toTransactions: 作为to的交易
 - token: Token信息
-  - id: Token在graph中唯一ID，格式为<合约地址>-<Token ID>
+  - id: Token在graph中唯一ID，格式为`<合约地址>-<Token ID>`
   - collection: 对应合约
   - tokenID: Token在合约中的ID
   - tokenURI: Token meta json的地址
