@@ -7,7 +7,8 @@
 - [开发相关](#开发相关)
   - [数据规范](#数据规范)
     - [NFT合约接口](#nft合约接口)
-    - [Meta json](#meta-json)
+    - [Metadata](#metadata)
+    - [合约的metadata](#合约的metadata)
   - [页面开发](#页面开发)
   - [后台开发](#后台开发)
     - [RPC及区块链浏览器](#rpc及区块链浏览器)
@@ -39,7 +40,7 @@
 - [IERC721Enumerable](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/IERC721Enumerable.sol)
 - [IERC721Metadata](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/IERC721Metadata.sol)
 
-### Meta json
+### Metadata
 接口IERC721Metadata中tokenURI方法会返回指向json的URL，格式如下
 ```jsonc
 {
@@ -50,10 +51,43 @@
   "creator": "NFT作者名称", // 作者
   "publisher": "NFT发行方", // 发行方
   "background_color": "99ccff", // NFT图片推荐背景填充色，开头不含#的hex [可选]
-  "external_url": "https://domain/url", // NFT扩展页面地址 [可选]
+  "external_url": "https://domain/url", // NFT扩展页面地址，用于显示在藏品详情下方 [可选]
+  "external_alt": "关于外链的描述", // 用于显示在藏品详情下方 [可选]
   "properties":  // 扩展属性 [可选]
   {
-    "rarity": {"name": "R级", "probability": "0.0001"} // 例：珍惜度 [可选]
+    "rarity": {"name": "R级", "probability": "0.0001"}, // 例：珍惜度 [可选]
+    "compose": {"image": "poster_image_url", "x": 0, "y": 0, "width": 100, "height": 100} // 图片合成时作为底图使用 [可选]
+  }
+}
+```
+
+### 合约的metadata
+可选，如有则定义合约的信息，可用于销售页、领取页等，在contractURI接口返回，合约接口如下
+```solidity
+contract MyCollectible is ERC721 {
+    function contractURI() public view returns (string memory) {
+        return "https://metadata-url.com/my-metadata";
+    }
+}
+```
+数据格式为
+```jsonc
+{
+  "name": "NFT名称", // 名称
+  "description": "NFT简介", // 简介
+  "image": "https://domain/poster_image", // 缩略图URL，必须是图片，建议为方形
+  "raw": "https://domain/raw_data", // 原始文件URL，可以是图片、视频、3D
+  "background_color": "99ccff", // NFT图片推荐背景填充色，开头不含#的hex [可选]
+  "publisher": "NFT发行方", // 发行方
+  "license": "license_url", // 版权授权信息
+  "detail": {"image":"image_url", "background_color":"99ccff"}, // 详情图片及背景填充色
+  "external_url": "https://domain/url", // NFT扩展页面地址，用于显示在藏品详情下方 [可选]
+  "external_alt": "关于外链的描述", // 用于显示在藏品详情下方 [可选]
+  "properties":  // 扩展属性 [可选] 同Metadata
+  {
+    "rarities": [{"rarity": {"name": "", probability: "0.0001"}}], // 例：珍惜度 [可选]
+    "og": {"title":"标题", "type":"website", "description": "正文", "image": "image_url"}, // open graph配置，详见https://ogp.me/ [可选]
+    "share": [{"media": "wechat", "type": "image", "image": "image_url"}], // 分享按钮配置 [可选]
   }
 }
 ```
