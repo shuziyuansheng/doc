@@ -95,7 +95,21 @@ contract MyCollectible is ERC721 {
 ## 页面开发
 数字原生为页面开发提供了一个Web3的Provider和Signer，可以完全兼容Web3开发模式。
 
-具体方法为引入数字原生的SW3包，使用SW3Provider或SW3Signer初始化ethers.js，之后和其他Web3应用开发没有区别。SW3会在需要时显示页面让用户完成授权地址和交易签名操作。
+具体方法为引入数字原生的SW3包`@szys/sw3`，详见https://www.npmjs.com/package/@szys/sw3
+
+使用SW3包中的`WebSocketProvider`或`JsonRpcProvider`初始化ethers.js，之后和其他Web3应用开发几乎没有区别。SW3会在需要时显示页面让用户完成授权地址和交易签名操作。
+
+示例代码：
+```javascript
+import { WebSocketProvider } from '@szys/sw3'
+import { Contract } from '@ethersproject/contracts'
+const provider = new WebSocketProvider('wss://rpc.beta.silvia.link/ws') // 正式网需要改成正式网的地址
+const contract = new Contract(contractAddress, abi, provider.getSigner(account))
+```
+
+参考页面：
+- Beta测试网：https://beta.shuziyuansheng.com/dApp/sample
+- 正式网：https://shuziyuansheng.com/dApp/sample
 
 ## 后台开发
 
@@ -103,11 +117,13 @@ contract MyCollectible is ERC721 {
 Silvia链的RPC完全兼容Geth，目前RPC及浏览器地址为
 
 - Beta测试网:
-  - RPC: https://rpc.beta.silvia.link
+  - RPC(JSON): https://rpc.beta.silvia.link
+  - RPC(WebSocket): wss://rpc.beta.silvia.link/ws
   - Chain ID: 49368
   - 区块链浏览器: https://scan.beta.silvia.link
 - 正式网:
-  - RPC: https://rpc.silvia.link
+  - RPC(JSON): https://rpc.silvia.link
+  - RPC(WebSocket): wss://rpc.silvia.link/ws
   - Chain ID: 8848
   - 区块链浏览器: https://scan.silvia.link
 
