@@ -95,7 +95,7 @@ contract MyCollectible is ERC721 {
 ## 页面开发
 数字原生为页面开发提供了一个Web3的Provider和Signer，可以完全兼容Web3开发模式。
 
-具体方法为引入数字原生的SW3包`@szys/sw3`，详见https://www.npmjs.com/package/@szys/sw3
+具体方法为引入数字原生的SW3包`@sw3/providers`，详见https://www.npmjs.com/package/@sw3/providers
 
 使用SW3包中的`WebSocketProvider`或`JsonRpcProvider`初始化ethers.js，之后和其他Web3应用开发几乎没有区别。SW3会在需要时显示页面让用户完成授权地址和交易签名操作。
 
@@ -245,17 +245,19 @@ https://scan.silvia.link/address/0xF6156B8581cEc2db6c0345Bd5a30fB716CB9E585/cont
 - https://scan.silvia.link/address/0xF6156B8581cEc2db6c0345Bd5a30fB716CB9E585/write-proxy
 
 委托状态变化顺序及方法调用为
-- 用户调用register注册，注册时传入价格、acceptTimeout和dealTimeout
-- 委托合约的owner调用preVerify进入预审核，或调用refuse直接拒绝
+- 用户调用委托合约的register注册，注册时传入价格、acceptTimeout和dealTimeout
+  - 价格仅用于记录
+- 委托合约的owner调用委托合约的preVerify进入预审核，或调用refuse直接拒绝
   - 预审核后会将token设置不可转赠
   - preVerify后会开始记录时间，超过acceptTimeout后用户可调用unregister撤回
-- 用户调用approve授权委托合约可转移token
-- 委托合约的owner调用accept将token转进合约，或调用refuse拒绝
+- 用户调用ERC721合约的approve方法传入委托合约地址，授权委托合约可转移token
+- 委托合约的owner调用委托合约的accept将token转进合约，或调用refuse拒绝
   - 如果用户未approve，此步会失败
+  - 此步不会更新token的最后转移时间
   - accept后会开始记录时间，超过dealTimeout后用户可调用unregister撤回
-- 委托合约的owner调用deal将token标记为已成交
+- 委托合约的owner调用委托合约的deal将token标记为已成交
   - 进入此状态后用户将无法unregister
-- 委托合约的owner调用finish将token转移给新持有者
+- 委托合约的owner调用委托合约的finish将token转移给新持有者
   - 此步会检查token的最后转移时间，如果未超过合约中的transferInterval将会失败
   - 此步成功后会更新token的最后转移时间
 
