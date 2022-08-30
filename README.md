@@ -101,9 +101,12 @@ contract MyCollectible is ERC721 {
 
 示例代码：
 ```javascript
-import { WebSocketProvider } from '@szys/sw3'
+import { WebSocketProvider, JsonRpcProvider } from '@sw3/providers'
 import { Contract } from '@ethersproject/contracts'
+// Provider
 const provider = new WebSocketProvider('wss://rpc.beta.silvia.link/ws') // 正式网需要改成正式网的地址
+// Signer
+const account = await provider.send('eth_requestAccounts')
 const contract = new Contract(contractAddress, abi, provider.getSigner(account))
 ```
 
